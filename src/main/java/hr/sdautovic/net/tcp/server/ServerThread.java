@@ -110,14 +110,14 @@ public class ServerThread extends Thread {
 				{
 					this.sessionThreads.remove(session);
 				}
-				log.error("Error while executing a session", e);
+				log.error("error while executing a session exception=", e);
 				
 				try
 				{
 					clientSocket.close();
 				} catch (IOException e1)
 				{
-					log.debug("Cannot close socket after exception", e1);
+					log.debug("cannot close socket after exception exception=", e1);
 				}
 				continue;
 			}
@@ -146,7 +146,7 @@ public class ServerThread extends Thread {
 			this.serverSocket.close();
 			log.debug("TCP server socket shutdown");
 		} catch (IOException e) {
-			log.error("Failed to close server socket", e);
+			log.error("failed to close server socket exception=", e);
 		}
 	}
 	
@@ -167,7 +167,7 @@ public class ServerThread extends Thread {
 		try {
 			this.executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		} catch (InterruptedException e) {
-			log.warn("Interrupted waiting for termination of session threads", e);
+			log.warn("interrupted waiting for termination of session threads exception=", e);
 			Thread.currentThread().interrupt();
 		}
 	}
