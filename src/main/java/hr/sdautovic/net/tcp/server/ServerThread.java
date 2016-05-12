@@ -1,6 +1,7 @@
 package hr.sdautovic.net.tcp.server;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -34,25 +35,23 @@ public class ServerThread extends Thread {
 	
 	private ExecutorService executorService = Executors.newCachedThreadPool();
 	
-	public ServerThread(TCPServer server, ServerSocket socket) throws UnknownHostException, IOException {
-		this.maxConnections = DEFAULT_MAX_CONNECTIONS;
+	public ServerThread(TCPServer server, String bindIp, int bindPort) throws UnknownHostException, IOException {
 		this.running = false;
+		this.maxConnections = DEFAULT_MAX_CONNECTIONS;
 		this.connectionPermits = new Semaphore(this.maxConnections);
 		this.sessionThreads = new HashSet<Session>(this.maxConnections * 4 / 3 + 1);
 		this.server = server;
-		this.serverSocket = socket;
+		this.serverSocket = new ServerSocket(bindPort, this.maxConnections, InetAddress.getByName(bindIp));
 	}
 	
-	public ServerThread(TCPServer server, ServerSocket socket, int max_connections) throws UnknownHostException, IOException {
+	public ServerThread(TCPServer server, String bindIp, int bindPort, int max_connections) throws UnknownHostException, IOException {
 		this.running = false;
 		this.maxConnections = max_connections;
 		this.connectionPermits = new Semaphore(this.maxConnections);
 		this.sessionThreads = new HashSet<Session>(this.maxConnections * 4 / 3 + 1);
 		this.server = server;
-		this.serverSocket = socket;
+		this.serverSocket = new ServerSocket(bindPort, this.maxConnections, InetAddress.getByName(bindIp));
 	}
-	
-	
 	
 	public ServerSocket getServerSocket() {
 		return serverSocket;
