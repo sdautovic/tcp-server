@@ -35,9 +35,7 @@ public class PingPongTcpServerApplication {
 				};
 			}
 		});
-//		ServerSocket serverSocket = new ServerSocket(9000, 0, InetAddress.getByName("0.0.0.0"));
-		
-		ServerThread serverThread = new ServerThread(server, "0.0.0.0", 9000, 1);
+		ServerThread serverThread = new ServerThread(server, "0.0.0.0", 9000, 10);
 		serverThread.start();
 	}
 }
