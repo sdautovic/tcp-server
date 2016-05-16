@@ -46,23 +46,21 @@ public class Session implements Runnable, ConnectionContext {
 	}
 	
 	private void closeConnection() {
-		try
-		{
-			try
-			{
-				this.socket.getInputStream().close();
-				this.socket.getOutputStream().close();
-				
-			} finally {
-				this.socket.close();
-			}
-		}
-		catch (IOException e) {
-			
-			try {
-				this.socket.close();
-			} catch (IOException e1) { }
-			
+		try {
+			this.getClientSocket().close();
+//			try
+//			{
+//				this.socket.getInputStream().close();
+//				this.socket.getOutputStream().close();
+//				
+//			} finally {
+//				this.socket.close();
+//			}
+		} catch (IOException e) {
+//			
+//			try {
+//				this.socket.close();
+//			} catch (IOException e1) { }			
 			log.error("closing connection from peer " + this.socket.getInetAddress().toString() + ":" + this.socket.getPort());
 		}
 	}
