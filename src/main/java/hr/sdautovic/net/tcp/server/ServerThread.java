@@ -33,7 +33,7 @@ public class ServerThread extends Thread {
 	
 	private final TCPServer server;
 	
-	private ExecutorService executorService = Executors.newCachedThreadPool();
+//	private ExecutorService executorService = Executors.newCachedThreadPool();
 	
 	public ServerThread(TCPServer server, String bindIp, int bindPort) throws UnknownHostException, IOException {
 		this.running = false;
@@ -79,14 +79,19 @@ public class ServerThread extends Thread {
 			
 			try {
 				clientSocket = this.serverSocket.accept();
-				
 			} catch (IOException e) {
 				connectionPermits.release();
 				
-				if (!this.running) {
-					return;
+				if (this.running) {
+					try
+					{
+						Thread.sleep(1000);
+					}
+					catch (InterruptedException consumed)
+					{
+						// fall through
+					}
 				}
-				
 				continue;
 			}
 			
@@ -101,7 +106,8 @@ public class ServerThread extends Thread {
 			}
 
 			try {
-				this.executorService.execute(session);
+//				this.executorService.execute(session);
+				this.server.getExecutorService().execute(session);
 			}
 			catch (RejectedExecutionException e) {
 				connectionPermits.release();
@@ -161,10 +167,10 @@ public class ServerThread extends Thread {
 			sessionThread.quit();
 		}
 	
-		this.executorService.shutdown();
+		this.server.getExecutorService().shutdown();
 		
 		try {
-			this.executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+			this.server.getExecutorService().awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 		} catch (InterruptedException e) {
 			log.warn("interrupted waiting for termination of session threads exception=", e);
 			Thread.currentThread().interrupt();

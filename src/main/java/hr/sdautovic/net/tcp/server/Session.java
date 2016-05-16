@@ -39,10 +39,9 @@ public class Session implements Runnable, ConnectionContext {
 
 	public void run() {
 		this.conectionHandler = this.server.getConnectionHandlerFactory().create(this);
-		
 		this.conectionHandler.handleConnection(this.socket, this.getServerSocket());
 		
-		closeConnection();
+		this.closeConnection();
 		this.serverThread.sessionEnded(this);
 	}
 	
@@ -53,13 +52,17 @@ public class Session implements Runnable, ConnectionContext {
 			{
 				this.socket.getInputStream().close();
 				this.socket.getOutputStream().close();
-			}
-			finally
-			{
+				
+			} finally {
 				this.socket.close();
 			}
 		}
 		catch (IOException e) {
+			
+			try {
+				this.socket.close();
+			} catch (IOException e1) { }
+			
 			log.error("closing connection from peer " + this.socket.getInetAddress().toString() + ":" + this.socket.getPort());
 		}
 	}

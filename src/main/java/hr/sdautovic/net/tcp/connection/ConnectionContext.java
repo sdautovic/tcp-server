@@ -6,4 +6,5 @@ import java.net.Socket;
 public interface ConnectionContext {
 	public Socket getClientSocket();
 	public ServerSocket getServerSocket();
+	void run();
 }
