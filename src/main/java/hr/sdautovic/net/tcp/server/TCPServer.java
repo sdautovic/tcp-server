@@ -7,8 +7,8 @@ import hr.sdautovic.net.tcp.connection.ConnectionHandlerFactory;
 
 public class TCPServer {
 	private ExecutorService executorService = Executors.newCachedThreadPool();
-	
 	private ConnectionHandlerFactory connectionHandlerFactory;
+	private int soTimeout = 0;
 	
 	public TCPServer(ConnectionHandlerFactory connectionHandlerFactory) {
 		this.connectionHandlerFactory = connectionHandlerFactory;
@@ -24,5 +24,13 @@ public class TCPServer {
 	
 	public ExecutorService getExecutorService() {
 		return this.executorService;
+	}
+	
+	public void setSoTimeout(int timeout) {
+		this.soTimeout = timeout;
+	}
+	
+	public int getSoTimeout() {
+		return this.soTimeout;
 	}
 }
